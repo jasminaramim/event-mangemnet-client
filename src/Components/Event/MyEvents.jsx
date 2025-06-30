@@ -47,7 +47,7 @@ const MyEvents = () => {
     const fetchEvents = async () => {
         if (user?.email) {
             try {
-                const response = await axios.get(`http://localhost:5000/events/email/${user.email}`)
+                const response = await axios.get(`https://event-mangemnet-server-5.onrender.com/events/email/${user.email}`)
                 setEvents(Array.isArray(response.data) ? response.data : [])
                 setLoading(false)
             } catch (err) {
@@ -87,7 +87,7 @@ const MyEvents = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    await axios.delete(`http://localhost:5000/events/${id}`)
+                    await axios.delete(`https://event-mangemnet-server-5.onrender.com/events/${id}`)
                     setEvents(events.filter((event) => event._id !== id))
                     Swal.fire("Deleted!", "The event has been deleted successfully.", "success")
                 } catch (error) {
@@ -159,7 +159,7 @@ const MyEvents = () => {
                 return
             }
 
-            const response = await axios.put(`http://localhost:5000/events/${currentEvent._id}`, formData)
+            const response = await axios.put(`https://event-mangemnet-server-5.onrender.com/events/${currentEvent._id}`, formData)
 
             if (response.data.success) {
                 toast.success("Event updated successfully!")

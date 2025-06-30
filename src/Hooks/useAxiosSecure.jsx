@@ -5,7 +5,7 @@ import { AuthContexts } from "../Providers/AuthProvider";
 
 
 export const axiosSecure = axios.create({
-  baseURL: "http://localhost:5000", // Replace with your server URL
+  baseURL: "https://event-mangemnet-server-5.onrender.com", // Replace with your server URL
   withCredentials: true, // This is essential for cookie-based auth
 });
 

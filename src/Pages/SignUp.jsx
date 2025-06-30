@@ -55,7 +55,7 @@ const SignUp = () => {
       };
 
       // Save user to MongoDB
-      await axios.post('http://localhost:5000/users', userData, {
+      await axios.post('https://event-mangemnet-server-5.onrender.com/users', userData, {
         withCredentials: true,
       });
 
@@ -98,7 +98,7 @@ const SignUp = () => {
       };
 
       // Save user to MongoDB
-      await axios.post('http://localhost:5000/users', userData, {
+      await axios.post('https://event-mangemnet-server-5.onrender.com/users', userData, {
         withCredentials: true,
       });
 

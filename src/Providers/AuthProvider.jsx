@@ -91,7 +91,7 @@ const AuthProvider = ({ children }) => {
       if (currentUser?.email) {
         try {
           await axios.post(
-            "http://localhost:5000/jwt",
+            "https://event-mangemnet-server-5.onrender.com/jwt",
             { email: currentUser.email },
             { withCredentials: true }
           );
@@ -108,7 +108,7 @@ const AuthProvider = ({ children }) => {
           setDbUser(null);
         }
       } else {
-        await axios.get("http://localhost:5000/logout", {
+        await axios.get("https://event-mangemnet-server-5.onrender.com/logout", {
           withCredentials: true,
         });
         setDbUser(null);

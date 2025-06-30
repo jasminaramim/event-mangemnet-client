@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createHashRouter } from "react-router-dom";
 import Home from "../Components/Home/Home";
 import App from "../App";
 import NotFound from "../Components/Shared/NotFound";
@@ -9,7 +9,7 @@ import AddEvents from "../Components/Event/AddEvents";
 import MyEvents from "../Components/Event/MyEvents";
 import EventsAll from "../Components/Home/EventsAll";
 
-const router = createBrowserRouter([
+const router = createHashRouter([
   {
     path: "/",
     element: <App />,

@@ -37,7 +37,7 @@ const EventsAll = () => {
   const fetchEvents = async () => {
     try {
       setLoading(true);
-      const response = await axios.get("http://localhost:5000/events", {
+      const response = await axios.get("https://event-mangemnet-server-5.onrender.com/events", {
         withCredentials: true,
       });
       setEvents(response.data);
@@ -82,7 +82,7 @@ const EventsAll = () => {
       }
 
       const response = await axios.post(
-        `http://localhost:5000/events/${eventId}/join`,
+        `https://event-mangemnet-server-5.onrender.com/events/${eventId}/join`,
         { email: userEmail },
         {
           headers: { "Content-Type": "application/json" },

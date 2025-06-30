@@ -80,9 +80,9 @@ const Login = () => {
     };
 
     // Check if user already exists before posting
-    const res = await axios.get(`http://localhost:5000/users/${firebaseUser.email}`);
+    const res = await axios.get(`https://event-mangemnet-server-5.onrender.com/users/${firebaseUser.email}`);
     if (!res.data) {
-      await axios.post('http://localhost:5000/users', userData, {
+      await axios.post('https://event-mangemnet-server-5.onrender.com/users', userData, {
         withCredentials: true,
       });
     }

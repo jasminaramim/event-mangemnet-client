@@ -52,7 +52,7 @@ const AddEvents = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post("http://localhost:5000/events", formData, {
+      const response = await axios.post("https://event-mangemnet-server-5.onrender.com/events", formData, {
         withCredentials: true,
       });
       if (response.data.success) {
