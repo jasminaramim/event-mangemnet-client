@@ -20,7 +20,7 @@ const Login = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [localLoading, setLocalLoading] = useState(false);
   const navigate = useNavigate();
-
+const from = location?.state?.from?.pathname || '/';
   // Load saved email if available
   useEffect(() => {
     const savedEmail = localStorage.getItem('rememberedEmail');
@@ -62,43 +62,17 @@ const Login = () => {
     }
   };
 
- const handleGoogleSignIn = async () => {
-  setErrorMessage('');
-  setLocalLoading(true);
-  setLoading(true);
 
-  try {
-    const result = await signInWithGoogle();
-    const firebaseUser = result.user;
-
-    const userData = {
-      name: firebaseUser.displayName,
-      email: firebaseUser.email,
-      photoURL: firebaseUser.photoURL,
-      createdAt: new Date().toISOString(),
-      role: 'user',
-    };
-
-    // Check if user already exists before posting
-    const res = await axios.get(`https://event-mangemnet-server-5.onrender.com/users/${firebaseUser.email}`);
-    if (!res.data) {
-      await axios.post('https://event-mangemnet-server-5.onrender.com/users', userData, {
-        withCredentials: true,
-      });
+  const handleGoogleSignIn = async () => {
+    try {
+      await signInWithGoogle();
+      navigate(from, { replace: true });
+      toast.success('Login Successful');
+    } catch (err) {
+      console.log(err);
+      toast.error(err?.message);
     }
-
-    toast.success('🎉 Logged in with Google successfully!');
-    navigate('/');
-  } catch (err) {
-    console.error('Google Sign-In Error:', err.message);
-    setErrorMessage(err.message);
-    toast.error(`❌ ${err.message}`);
-  } finally {
-    setLocalLoading(false);
-    setLoading(false);
-  }
-};
-
+  };
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 relative overflow-hidden">
       <Toaster position="top-center" />

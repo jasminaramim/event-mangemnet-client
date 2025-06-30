@@ -9,7 +9,7 @@ import {
   FaCheckCircle,
   FaExclamationTriangle,
   FaInfoCircle,
-  FaSearch
+  FaSearch,
 } from "react-icons/fa";
 import { toast, Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
@@ -20,6 +20,7 @@ const EventsAll = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [joiningEvent, setJoiningEvent] = useState(null);
+  const [expandedDescriptions, setExpandedDescriptions] = useState({}); // New state for expanded descriptions
 
   const { user } = useContext(AuthContexts) || {};
   const navigate = useNavigate();
@@ -37,15 +38,18 @@ const EventsAll = () => {
   const fetchEvents = async () => {
     try {
       setLoading(true);
-      const response = await axios.get("https://event-mangemnet-server-5.onrender.com/events", {
-        withCredentials: true,
-      });
+      const response = await axios.get(
+        "https://event-mangemnet-server-5.onrender.com/events",
+        {
+          withCredentials: true,
+        }
+      );
       setEvents(response.data);
       setError(null);
     } catch (err) {
       console.error("Error fetching events:", err);
       setError("Failed to load events. Please try again.");
-      toast.error("Failed to load events", { id: 'fetchEventsError' });
+      toast.error("Failed to load events", { id: "fetchEventsError" });
     } finally {
       setLoading(false);
     }
@@ -118,9 +122,11 @@ const EventsAll = () => {
   };
 
   const isSameDay = (d1, d2) => {
-    return d1.getFullYear() === d2.getFullYear() &&
-           d1.getMonth() === d2.getMonth() &&
-           d1.getDate() === d2.getDate();
+    return (
+      d1.getFullYear() === d2.getFullYear() &&
+      d1.getMonth() === d2.getMonth() &&
+      d1.getDate() === d2.getDate()
+    );
   };
 
   const getWeekBounds = (date) => {
@@ -159,16 +165,20 @@ const EventsAll = () => {
   const isCurrentMonth = (eventDate) => {
     const today = new Date();
     const eventDt = new Date(eventDate);
-    return eventDt.getFullYear() === today.getFullYear() &&
-           eventDt.getMonth() === today.getMonth();
+    return (
+      eventDt.getFullYear() === today.getFullYear() &&
+      eventDt.getMonth() === today.getMonth()
+    );
   };
 
   const isLastMonth = (eventDate) => {
     const today = new Date();
     const lastMonth = new Date(today.getFullYear(), today.getMonth() - 1, 1);
     const eventDt = new Date(eventDate);
-    return eventDt.getFullYear() === lastMonth.getFullYear() &&
-           eventDt.getMonth() === lastMonth.getMonth();
+    return (
+      eventDt.getFullYear() === lastMonth.getFullYear() &&
+      eventDt.getMonth() === lastMonth.getMonth()
+    );
   };
 
   const filteredEvents = useMemo(() => {
@@ -215,6 +225,14 @@ const EventsAll = () => {
     toast.success("Filters cleared!");
   };
 
+  // Function to toggle description expansion
+  const toggleDescription = (eventId) => {
+    setExpandedDescriptions((prev) => ({
+      ...prev,
+      [eventId]: !prev[eventId],
+    }));
+  };
+
   if (loading) {
     return (
       <div className="flex flex-col justify-center items-center min-h-screen bg-gray-50">
@@ -258,8 +276,8 @@ const EventsAll = () => {
               color: "#fff",
             },
             iconTheme: {
-              primary: '#fff',
-              secondary: '#10B981',
+              primary: "#fff",
+              secondary: "#10B981",
             },
           },
           error: {
@@ -269,8 +287,8 @@ const EventsAll = () => {
               color: "#fff",
             },
             iconTheme: {
-              primary: '#fff',
-              secondary: '#EF4444',
+              primary: "#fff",
+              secondary: "#EF4444",
             },
           },
         }}
@@ -281,7 +299,9 @@ const EventsAll = () => {
           <span className="text-red-600">🎉</span> Explore All Events
         </h2>
         <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-          Discover a diverse range of exciting events, from international congresses to meditation classes, and connect with communities that share your interests.
+          Discover a diverse range of exciting events, from international
+          congresses to meditation classes, and connect with communities that
+          share your interests.
         </p>
       </div>
 
@@ -325,8 +345,19 @@ const EventsAll = () => {
             <option value="currentMonth">Current Month</option>
             <option value="lastMonth">Last Month</option>
           </select>
-          <svg className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
+          <svg
+            className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M19 9l-7 7-7-7"
+            ></path>
           </svg>
         </div>
 
@@ -355,32 +386,42 @@ const EventsAll = () => {
               ? event.attendees
               : [];
 
-            const currentUserHasJoined = isLoggedIn && attendees.some((attendee) => {
-              if (typeof attendee !== "string") return false;
-              const normalizedAttendee = attendee.toLowerCase().trim();
-              const normalizedUserEmail = userEmail.toLowerCase().trim();
-              return normalizedAttendee === normalizedUserEmail;
-            });
+            const currentUserHasJoined =
+              isLoggedIn &&
+              attendees.some((attendee) => {
+                if (typeof attendee !== "string") return false;
+                const normalizedAttendee = attendee.toLowerCase().trim();
+                const normalizedUserEmail = userEmail.toLowerCase().trim();
+                return normalizedAttendee === normalizedUserEmail;
+              });
 
             const currentAttendees = event.currentAttendees || 0;
             const maxAttendees = event.maxAttendees || 0;
             const isFull = maxAttendees > 0 && currentAttendees >= maxAttendees;
             const isJoining = joiningEvent === event._id;
 
-            const isButtonDisabled = !isLoggedIn || currentUserHasJoined || isFull || isJoining;
+            const isButtonDisabled =
+              !isLoggedIn || currentUserHasJoined || isFull || isJoining;
+
+            // Determine if the description should be expanded
+            const isDescriptionExpanded = expandedDescriptions[event._id];
 
             return (
               <div
                 key={event._id}
-                className="bg-white rounded-2xl border overflow-hidden transform transition-all duration-300 hover:scale-103 hover:shadow-2xl relative"
+                className="bg-white rounded-2xl border overflow-hidden transform transition-all duration-300 hover:scale-103 hover:shadow-2xl relative flex flex-col" // Added flex-col
               >
                 <div className="relative">
                   <img
-                    src={event.image || "https://placehold.co/600x400/cccccc/333333?text=Event+Image"}
+                    src={
+                      event.image ||
+                      "https://placehold.co/600x400/cccccc/333333?text=Event+Image"
+                    }
                     alt={event.title}
                     className="w-full h-48 object-cover"
                     onError={(e) => {
-                      e.target.src = "https://placehold.co/600x400/cccccc/333333?text=Event+Image";
+                      e.target.src =
+                        "https://placehold.co/600x400/cccccc/333333?text=Event+Image";
                     }}
                   />
                   <div className="absolute top-4 right-4 flex flex-col items-end gap-2 z-10">
@@ -398,7 +439,7 @@ const EventsAll = () => {
                   </div>
                 </div>
 
-                <div className="p-6">
+                <div className="p-6 flex flex-col flex-grow"> {/* Added flex-grow */}
                   <div className="flex items-center justify-between mb-3">
                     <h3 className="text-xl font-bold text-gray-800 line-clamp-2 pr-2">
                       {event.title}
@@ -406,7 +447,10 @@ const EventsAll = () => {
                   </div>
 
                   <p className="text-sm text-gray-500 mb-4">
-                    Organized by: <span className="font-medium text-red-600">{event.name}</span>
+                    Organized by:{" "}
+                    <span className="font-medium text-red-600">
+                      {event.name}
+                    </span>
                   </p>
 
                   <div className="space-y-2 text-gray-700 mb-4">
@@ -432,115 +476,130 @@ const EventsAll = () => {
                     </div>
 
                     {event.description && (
-                      <p className="text-gray-600 text-sm mt-3 line-clamp-3">
-                        {event.description}
-                      </p>
-                    )}
-                  </div>
-
-                  <div className="flex items-center justify-between border-t border-gray-100 pt-4 mt-4">
-                    <div className="flex items-center gap-2 text-gray-700">
-                      <FaUsers className="text-red-500" />
-                      <span className="text-sm font-semibold">
-                        {currentAttendees} / {maxAttendees || "Unlimited"} Attendees
-                      </span>
-                    </div>
-
-                    {maxAttendees > 0 && (
-                      <div className="flex-1 ml-4 h-2 bg-gray-200 rounded-full">
-                        <div
-                          className={`h-full rounded-full transition-all duration-300 ${
-                            isFull ? "bg-red-500" : "bg-green-500"
-                          }`}
-                          style={{
-                            width: `${Math.min(
-                              (currentAttendees / maxAttendees) * 100,
-                              100
-                            )}%`,
-                          }}
-                        ></div>
-                      </div>
-                    )}
-                  </div>
-
-                  {attendees.length > 0 && (
-                    <div className="pt-4 mt-4 border-t border-gray-100">
-                      <p className="text-xs text-gray-500 mb-2">
-                        Who's Going:
-                      </p>
-                      <div className="flex flex-wrap gap-1">
-                        {attendees.slice(0, 4).map((attendee, index) => (
-                          <span
-                            key={index}
-                            className={`text-xs px-2 py-1 rounded-full ${
-                              isLoggedIn && attendee?.toLowerCase().trim() ===
-                              userEmail.toLowerCase().trim()
-                                ? "bg-green-100 text-green-800 font-semibold"
-                                : "bg-gray-100 text-gray-600"
-                            }`}
+                      <div className="text-gray-600 text-sm mt-3">
+                        <p className={isDescriptionExpanded ? "" : "line-clamp-2"}>
+                          {event.description}
+                        </p>
+                        {event.description.split('\n').length > 2 || event.description.length > 100 ? ( // Simple check for long description
+                          <button
+                            onClick={() => toggleDescription(event._id)}
+                            className="text-red-600 hover:underline text-sm mt-1"
                           >
-                            {isLoggedIn && attendee?.toLowerCase().trim() ===
-                            userEmail.toLowerCase().trim()
-                              ? "You"
-                              : attendee?.split("@")[0] || "Unknown"}
-                          </span>
-                        ))}
-                        {attendees.length > 4 && (
-                          <span className="text-xs px-2 py-1 rounded-full bg-gray-100 text-gray-600">
-                            +{attendees.length - 4} more
-                          </span>
-                        )}
+                            {isDescriptionExpanded ? "See Less" : "See More"}
+                          </button>
+                        ) : null}
                       </div>
-                    </div>
-                  )}
-
-                  <button
-                    className={`w-full mt-6 py-2.5 px-4 text-white font-semibold rounded-lg transition-all duration-300 flex items-center justify-center gap-2 text-sm ${
-                      !isLoggedIn
-                        ? "bg-gray-500 cursor-not-allowed"
-                        : currentUserHasJoined
-                        ? "bg-green-600 cursor-default"
-                        : isFull
-                        ? "bg-gray-400 cursor-not-allowed"
-                        : isJoining
-                        ? "bg-red-400 cursor-wait"
-                        : "bg-red-600 hover:bg-red-700 hover:scale-105 active:scale-95"
-                    }`}
-                    onClick={() => handleJoinEvent(event._id)}
-                    disabled={isButtonDisabled}
-                    title={
-                      !isLoggedIn
-                        ? "Please log in to join events"
-                        : isJoining
-                        ? "Processing your request..."
-                        : currentUserHasJoined
-                        ? "You have already joined this event"
-                        : isFull
-                        ? "This event is full"
-                        : "Click to join this event"
-                    }
-                  >
-                    {isJoining ? (
-                      <>
-                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                        Joining...
-                      </>
-                    ) : !isLoggedIn ? (
-                      <>
-                        <FaInfoCircle className="w-4 h-4" />
-                        Log in to Join
-                      </>
-                    ) : currentUserHasJoined ? (
-                      <>
-                        <FaCheckCircle className="w-4 h-4" />
-                        Already Joined
-                      </>
-                    ) : isFull ? (
-                      "Event Full"
-                    ) : (
-                      "Join Event"
                     )}
-                  </button>
+                  </div>
+
+                  <div className="mt-auto"> {/* Pushes content to the bottom */}
+                    <div className="flex items-center justify-between border-t border-gray-100 pt-4 mt-4">
+                      <div className="flex items-center gap-2 text-gray-700">
+                        <FaUsers className="text-red-500" />
+                        <span className="text-sm font-semibold">
+                          {currentAttendees} / {maxAttendees || "Unlimited"}{" "}
+                          Attendees
+                        </span>
+                      </div>
+
+                      {maxAttendees > 0 && (
+                        <div className="flex-1 ml-4 h-2 bg-gray-200 rounded-full">
+                          <div
+                            className={`h-full rounded-full transition-all duration-300 ${
+                              isFull ? "bg-red-500" : "bg-green-500"
+                            }`}
+                            style={{
+                              width: `${Math.min(
+                                (currentAttendees / maxAttendees) * 100,
+                                100
+                              )}%`,
+                            }}
+                          ></div>
+                        </div>
+                      )}
+                    </div>
+
+                    {attendees.length > 0 && (
+                      <div className="pt-4 mt-4 border-t border-gray-100">
+                        <p className="text-xs text-gray-500 mb-2">
+                          Who's Going:
+                        </p>
+                        <div className="flex flex-wrap gap-1">
+                          {attendees.slice(0, 4).map((attendee, index) => (
+                            <span
+                              key={index}
+                              className={`text-xs px-2 py-1 rounded-full ${
+                                isLoggedIn &&
+                                attendee?.toLowerCase().trim() ===
+                                  userEmail.toLowerCase().trim()
+                                  ? "bg-green-100 text-green-800 font-semibold"
+                                  : "bg-gray-100 text-gray-600"
+                              }`}
+                            >
+                              {isLoggedIn &&
+                              attendee?.toLowerCase().trim() ===
+                                userEmail.toLowerCase().trim()
+                                ? "You"
+                                : attendee?.split("@")[0] || "Unknown"}
+                            </span>
+                          ))}
+                          {attendees.length > 4 && (
+                            <span className="text-xs px-2 py-1 rounded-full bg-gray-100 text-gray-600">
+                              +{attendees.length - 4} more
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    )}
+
+                    <button
+                      className={`w-full mt-6 py-2.5 px-4 text-white font-semibold rounded-lg transition-all duration-300 flex items-center justify-center gap-2 text-sm ${
+                        !isLoggedIn
+                          ? "bg-gray-500 cursor-not-allowed"
+                          : currentUserHasJoined
+                          ? "bg-green-600 cursor-default"
+                          : isFull
+                          ? "bg-gray-400 cursor-not-allowed"
+                          : isJoining
+                          ? "bg-red-400 cursor-wait"
+                          : "bg-red-600 hover:bg-red-700 hover:scale-105 active:scale-95"
+                      }`}
+                      onClick={() => handleJoinEvent(event._id)}
+                      disabled={isButtonDisabled}
+                      title={
+                        !isLoggedIn
+                          ? "Please log in to join events"
+                          : isJoining
+                          ? "Processing your request..."
+                          : currentUserHasJoined
+                          ? "You have already joined this event"
+                          : isFull
+                          ? "This event is full"
+                          : "Click to join this event"
+                      }
+                    >
+                      {isJoining ? (
+                        <>
+                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                          Joining...
+                        </>
+                      ) : !isLoggedIn ? (
+                        <>
+                          <FaInfoCircle className="w-4 h-4" />
+                          Log in to Join
+                        </>
+                      ) : currentUserHasJoined ? (
+                        <>
+                          <FaCheckCircle className="w-4 h-4" />
+                          Already Joined
+                        </>
+                      ) : isFull ? (
+                        "Event Full"
+                      ) : (
+                        "Join Event"
+                      )}
+                    </button>
+                  </div>
                 </div>
               </div>
             );
