@@ -1,12 +1,47 @@
-# React + Vite
+# 🌿 Enenvtify
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Enenvtify** is a modern, eco-conscious web platform designed to promote sustainability and community-driven environmental initiatives. Whether it's tracking green events, volunteering, or sharing local eco-news — Enenvtify brings people together for a better planet. 🌍💚
 
-Currently, two official plugins are available:
+🔗 **Live Website**:[ [https://enenvtify.netlify.app](https://enenvtify.netlify.app)](https://eventify-manage.netlify.app/)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## 📸 Preview
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+[![Enenvtify Screenshot](https://enenvtify.netlify.app/preview.jpg)](https://eventify-manage.netlify.app/)
+
+---
+
+## 🧩 Key Features
+
+- 🌱 **Green Events Directory** – Discover local environmental events and participate.
+- 📣 **Blog Section** – Stay informed with the latest sustainability news and tips.
+- 🛍️ **Eco-Shop** – Browse eco-friendly products and tools.
+- 🧍‍♂️ **Volunteer & Donate** – Support green causes by contributing your time or donations.
+- 🔒 **Authentication System** – Secure login/signup for contributors and admins.
+- 📊 **Admin Dashboard** – Manage events, blogs, users, and donations easily.
+- 🌐 **Responsive Design** – Optimized for mobile, tablet, and desktop.
+
+---
+
+## 🛠️ Tech Stack
+
+- **Frontend**: React.js, Tailwind CSS, JavaScript
+- **Routing**: React Router DOM
+- **State Management**: Redux Toolkit
+- **Backend**: Node.js, Express.js
+- **Database**: MongoDB
+- **Authentication**: Firebase/Auth or JWT
+- **Rich Text Editor**: Jodit React
+- **Payment Integration**: Stripe
+- **Deployment**: Netlify (frontend), Render/Heroku (backend)
+
+---
+
+## 🚀 Installation
+
+Clone the project:
+
+```bash
+git clone https://github.com/your-username/enenvtify.git
+cd enenvtify
