@@ -2,7 +2,7 @@
 
 **Enenvtify** is a modern, eco-conscious web platform designed to promote sustainability and community-driven environmental initiatives. Whether it's tracking green events, volunteering, or sharing local eco-news — Enenvtify brings people together for a better planet. 🌍💚
 
-🔗 **Live Website**:[ [https://enenvtify.netlify.app](https://enenvtify.netlify.app)](https://eventify-manage.netlify.app/)
+🔗 **Live Website**:= [(https://eventify-manage.netlify.app/)](https://eventify-manage.netlify.app/)
 
 ---
 
